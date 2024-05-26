@@ -1,14 +1,20 @@
 import database from "/infra/database";
 
 async function status(request, response) {
-  const selectDbVersionResult = await database.query("SHOW server_version;");
-  const dbVersion = selectDbVersionResult.rows[0].server_version;
+  const showDbVersionResult = await database.query("SHOW server_version;");
+  const dbVersion = showDbVersionResult.rows[0].server_version;
 
-  const result = await database.query(
-    "SELECT current_setting('max_connections') as max_connections, (select count(*) from pg_stat_activity) as opened_connections",
+  const showDbMaxConnectionsResult = await database.query(
+    "SHOW max_connections;",
+  );
+  const dbMaxConnections = parseInt(
+    showDbMaxConnectionsResult.rows[0].max_connections,
   );
 
-  const dbMaxConnections = parseInt(result.rows[0].max_connections);
+  const result = await database.query(
+    "select count(*) from pg_stat_activity as opened_connections",
+  );
+
   const dbOpenedConnections = parseInt(result.rows[0].opened_connections);
 
   const updatedAt = new Date().toISOString();
