@@ -11,11 +11,11 @@ async function status(request, response) {
     showDbMaxConnectionsResult.rows[0].max_connections,
   );
 
-  const result = await database.query(
-    "select count(*) from pg_stat_activity as opened_connections",
+  const dbOpenedConnectionsResult = await database.query(
+    "SELECT count(*)::int from pg_stat_activity where datname = 'postgres'",
   );
-
-  const dbOpenedConnections = parseInt(result.rows[0].opened_connections);
+  console.log(dbOpenedConnectionsResult.rows);
+  const dbOpenedConnections = dbOpenedConnectionsResult.rows[0].count;
 
   const updatedAt = new Date().toISOString();
 
