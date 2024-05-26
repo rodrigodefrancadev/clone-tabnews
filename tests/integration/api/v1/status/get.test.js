@@ -7,4 +7,7 @@ test("Get api/v1/status and return status 200", async () => {
 
   const parsedDate = new Date(body.updated_at);
   expect(body.updated_at).toBe(parsedDate.toISOString());
+
+  expect(body.dependencies?.database).toBeDefined();
+  expect(body.dependencies.database.version).toBeDefined();
 });
