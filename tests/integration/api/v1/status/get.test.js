@@ -9,7 +9,7 @@ test("Get api/v1/status and return status 200", async () => {
   expect(body.updated_at).toBe(parsedDate.toISOString());
 
   expect(body.dependencies?.database).toBeDefined();
-  expect(body.dependencies.database.version).toBeDefined();
+  expect(body.dependencies.database.version).toEqual("16.0");
   expect(body.dependencies.database.max_connections).toBeDefined();
   expect(body.dependencies.database.opened_connections).toBeDefined();
 });
